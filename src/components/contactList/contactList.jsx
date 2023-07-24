@@ -1,29 +1,33 @@
-import { useSelector } from "react-redux";
-import Notiflix from "notiflix";
-import css from "./contactList.module.css";
-import {
-  useGetContactsQuery,
-  useDeleteContactsMutation,
-} from "redux/contactsApi";
-import { selectFilterField } from "redux/selectors";
+import Notiflix from 'notiflix';
+import css from './contactList.module.css';
+
+import { getContacts, selectFilterField } from 'redux/selectors';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteContacts, fetchContacts } from 'redux/operations';
+import { useEffect } from 'react';
 
 export default function ContactList() {
-  const { data: contacts, isLoading } = useGetContactsQuery();
-  const [func] = useDeleteContactsMutation();
+  const contacts = useSelector(getContacts);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
 
   const filterValue = useSelector(selectFilterField);
 
   const filteredContacts = () =>
-    contacts.filter((contact) =>
+    contacts.filter(contact =>
       contact.name.toLowerCase().includes(filterValue)
     );
 
   return (
     <>
-      {isLoading ? <div>Loading...</div> : ""}
-      <ul>
-        {!isLoading &&
-          filteredContacts().map(({ name, phone, id }) => (
+      {contacts.length === 0 ? (
+        <div>You haven't contacts</div>
+      ) : (
+        <ul>
+          {filteredContacts().map(({ name, phone, id }) => (
             <li key={id}>
               <span className={css.name}> {name}:</span>
               <span className={css.number}>{phone}</span>
@@ -32,14 +36,15 @@ export default function ContactList() {
                 id={id}
                 onClick={() => {
                   Notiflix.Notify.success(`You delete contact`);
-                  func(id);
+                  dispatch(deleteContacts(id));
                 }}
               >
                 Delete
               </button>
             </li>
           ))}
-      </ul>
+        </ul>
+      )}
     </>
   );
 }

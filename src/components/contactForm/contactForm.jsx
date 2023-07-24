@@ -1,41 +1,39 @@
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import { object, string } from "yup";
-import css from "./contactForm.module.css";
-import { useAddContactMutation, useGetContactsQuery } from "redux/contactsApi";
-import Notiflix from "notiflix";
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { object, string } from 'yup';
+import css from './contactForm.module.css';
+
+import Notiflix from 'notiflix';
+import { useDispatch, useSelector } from 'react-redux';
+import { getContacts } from 'redux/selectors';
+import { addContacts } from 'redux/operations';
 
 const initialValues = {
-  name: "",
-  number: "",
+  name: '',
+  number: '',
 };
 
 let userSchema = object().shape({
   name: string().min(2).required(),
   number: string()
-    .min(9, "please enter number in forms: xxx-xx-xx")
+    .min(9, 'please enter number in forms: xxx-xx-xx')
     .matches(
       /^((\(\d{3}\) ?)|(\d{3}-))?\d{2}-\d{2}$/,
-      "enter number in forms: xxx-xx-xx"
+      'enter number in forms: xxx-xx-xx'
     )
     .required(),
 });
 
-export default function ContactForm() {
-  const [fn] = useAddContactMutation();
-  const { data: contacts } = useGetContactsQuery();
+export function ContactForm() {
+  const contacts = useSelector(getContacts);
+  const dispatch = useDispatch();
 
   const handleSubmit = ({ name, number }, action) => {
-    console.log("name", name, number);
-
-    if (contacts.find((contact) => contact.name === name) !== undefined) {
+    if (contacts.find(contact => contact.name === name) !== undefined) {
       Notiflix.Notify.failure(`${name} is already saved in your contacts`);
       return;
     }
 
-    const contact = { name, phone: number };
-
-    fn(contact);
-
+    dispatch(addContacts({ name, number }));
     Notiflix.Notify.success(
       `${name} has been successfully added to your contacts`
     );
@@ -65,7 +63,6 @@ export default function ContactForm() {
             name="number"
           />
         </label>
-        <br></br>
         <button type="submit">Add contact</button>
       </Form>
     </Formik>
