@@ -49,7 +49,7 @@ export const Home = () => {
               className={css.button}
               onClick={() => navigate('/registration', { replace: true })}
             >
-              Sign Up
+              Register
             </button>
             <p className={css.pusher}>or</p>
             <button

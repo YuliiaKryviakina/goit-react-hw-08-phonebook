@@ -1,4 +1,4 @@
-import css from './signUp.module.css';
+import css from './register.module.css';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -24,7 +24,7 @@ let userSchema = object().shape({
   checkPassword: string().required(),
 });
 
-export const SignUp = () => {
+export const Register = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -44,7 +44,7 @@ export const SignUp = () => {
 
   return (
     <>
-      <h1>SignUp</h1>
+      <h1>Register </h1>
       <Formik
         initialValues={initialValue}
         onSubmit={handleSubmit}

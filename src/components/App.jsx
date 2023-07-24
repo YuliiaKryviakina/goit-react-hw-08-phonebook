@@ -1,5 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
-import { SignUp } from '../pages/SignUp/signUp';
+import { Register } from '../pages/Register/register';
 import { SharedLayout } from './sharedLayout/sharedLayout';
 import { Home } from '../pages/Home/home';
 import { Login } from '../pages/Login/login';
@@ -30,7 +30,10 @@ export const App = () => {
           <Route
             path="/registration"
             element={
-              <RestrictedRoute redirectTo="/contacts" component={<SignUp />} />
+              <RestrictedRoute
+                redirectTo="/contacts"
+                component={<Register />}
+              />
             }
           />
           <Route
