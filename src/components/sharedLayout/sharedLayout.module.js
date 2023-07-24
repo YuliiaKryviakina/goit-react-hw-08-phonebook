@@ -22,7 +22,7 @@ export const Header = styled.header`
 
 export const Logo = styled.p`
   font-weight: 700;
-  color: rgb(35, 21, 237);
+  color: #de6cef;
   font-size: 36px;
   margin: 0;
 `;
@@ -36,6 +36,6 @@ export const Link = styled(NavLink)`
   font-size: 24px;
 
   &.active {
-    color: rgb(35, 21, 237);
+    color: #de6cef;
   }
 `;
